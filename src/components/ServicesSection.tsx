@@ -1,11 +1,12 @@
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { 
-  Users, 
-  Link2, 
-  Target, 
-  BarChart3, 
-  Zap, 
+import LottieAnimation from "./LottieAnimation";
+import {
+  Users,
+  Link2,
+  Target,
+  BarChart3,
+  Zap,
   LineChart,
   ArrowRight,
   TrendingUp,
@@ -16,6 +17,7 @@ import {
 const services = [
   {
     icon: Users,
+    lottieUrl: "https://lottie.host/933cece9-8973-4f96-857c-658f80455de8/mCszl9kLUP.json",
     title: "User Acquisition",
     description: "Scale your user base with precision-targeted campaigns across Meta, Google, TikTok, and programmatic networks.",
     metrics: { label: "Avg CPA Reduction", value: "42%" },
@@ -28,6 +30,7 @@ const services = [
   },
   {
     icon: Target,
+    lottieUrl: "https://lottie.host/d6b38c22-9214-4363-94df-73900b3f5457/N9b7Dk4x8v.json",
     title: "Lead Generation",
     description: "Multi-channel lead generation engines optimized for quality, conversion, and lifetime value.",
     metrics: { label: "Monthly Leads", value: "2.5M+" },
@@ -46,6 +49,7 @@ const services = [
   },
   {
     icon: LineChart,
+    lottieUrl: "https://lottie.host/e8220f8c-473d-4c3d-b4a1-0ca9813c9e6d/6S8Zf9oKID.json",
     title: "CRO & Analytics",
     description: "Data-driven conversion rate optimization backed by advanced tracking and attribution modeling.",
     metrics: { label: "ROAS Improvement", value: "3.2x" },
@@ -58,6 +62,7 @@ const services = [
   },
   {
     icon: Rocket,
+    lottieUrl: "https://lottie.host/64299b1e-6e86-4e5c-a563-146313b4c10c/pP0eW8C9J9.json",
     title: "Creative Testing",
     description: "AI-powered creative testing frameworks that identify winning ad combinations at scale.",
     metrics: { label: "Tests/Month", value: "10K+" },
@@ -98,10 +103,10 @@ const TiltCard = ({ children, className = "" }: TiltCardProps) => {
     <motion.div
       ref={ref}
       className={`perspective-1000 ${className}`}
-      style={{ 
-        rotateX, 
-        rotateY, 
-        scale, 
+      style={{
+        rotateX,
+        rotateY,
+        scale,
         transformStyle: "preserve-3d"
       }}
       onMouseMove={handleMouseMove}
@@ -137,7 +142,7 @@ const ServicesSection = () => {
             Full-Stack Performance Solutions
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            From user acquisition to conversion optimization, we offer comprehensive 
+            From user acquisition to conversion optimization, we offer comprehensive
             performance marketing services that drive measurable growth at scale.
           </p>
         </motion.div>
@@ -154,8 +159,12 @@ const ServicesSection = () => {
               <TiltCard>
                 <div className="group h-full bg-card rounded-2xl p-6 border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-500 cursor-pointer">
                   {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors duration-300">
-                    <service.icon className="w-6 h-6 text-primary" />
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors duration-300 overflow-hidden">
+                    {'lottieUrl' in service && service.lottieUrl ? (
+                      <LottieAnimation url={service.lottieUrl as string} className="w-10 h-10" />
+                    ) : (
+                      <service.icon className="w-6 h-6 text-primary" />
+                    )}
                   </div>
 
                   {/* Title */}

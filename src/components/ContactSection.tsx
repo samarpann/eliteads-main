@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Send, CheckCircle, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { SectionDecorator, PixelArrow, PixelGem } from "./PixelDecorations";
 import PixelEmoji from "./PixelEmoji";
@@ -25,9 +26,12 @@ const verticals = [
 ];
 
 const ContactSection = () => {
+  const navigate = useNavigate();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,12 +40,45 @@ const ContactSection = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
-    setTimeout(() => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      // ✅ Google Apps Script Web App URL - Connected to Google Sheets
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTs9GzqoJDqyfAObMJRRu-QaFSSLOLxivTvWcOX2pZo95vqjm5xreuP5XbPfULJKNj7Q/exec';
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Apps Script
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          spend: formData.spend,
+          vertical: formData.vertical,
+          message: formData.message,
+        }),
+      });
+
+      // With 'no-cors', we can't read the response, but if we get here, it likely worked
       setIsSubmitted(true);
-    }, 500);
+      setFormData({ name: "", email: "", spend: "", vertical: "", message: "" });
+
+      // Redirect to success page after a short delay
+      setTimeout(() => {
+        navigate("/success");
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setError('Failed to submit. Please try again or email us directly at hello@elitead.io');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -55,21 +92,21 @@ const ContactSection = () => {
       <div className="absolute inset-0 grid-pattern-gold opacity-20" />
       <div className="absolute top-0 left-0 right-0 glow-line" />
       <div className="absolute top-1/4 right-0 w-1/2 h-60 bg-gradient-radial from-secondary/10 to-transparent" />
-      
+
       {/* Pixel Decorations */}
       <SectionDecorator variant="full" />
       <PixelArrow direction="down" size={28} color="secondary" className="absolute top-20 left-[5%] hidden xl:block" />
       <PixelGem size={22} color="primary" className="absolute top-1/3 right-[4%] hidden xl:block" />
 
       {/* Floating Pixel Emoji Decorations */}
-      <motion.div 
+      <motion.div
         className="absolute top-24 right-[12%] hidden lg:block"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, type: "spring" }}
       >
         <motion.div
-          animate={{ 
+          animate={{
             y: [0, -12, 0],
             rotate: [0, 5, -5, 0]
           }}
@@ -79,14 +116,14 @@ const ContactSection = () => {
         </motion.div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         className="absolute bottom-32 left-[8%] hidden lg:block"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.7, type: "spring" }}
       >
         <motion.div
-          animate={{ 
+          animate={{
             y: [0, -18, 0],
             x: [0, 5, 0]
           }}
@@ -96,14 +133,14 @@ const ContactSection = () => {
         </motion.div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         className="absolute top-1/2 left-[3%] hidden xl:block"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.9, type: "spring" }}
       >
         <motion.div
-          animate={{ 
+          animate={{
             y: [0, -15, 0],
             scale: [1, 1.1, 1]
           }}
@@ -113,14 +150,14 @@ const ContactSection = () => {
         </motion.div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         className="absolute bottom-40 right-[6%] hidden xl:block"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1.1, type: "spring" }}
       >
         <motion.div
-          animate={{ 
+          animate={{
             y: [0, -10, 0],
             rotate: [-5, 5, -5]
           }}
@@ -130,14 +167,14 @@ const ContactSection = () => {
         </motion.div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         className="absolute top-36 left-[15%] hidden xl:block"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1.3, type: "spring" }}
       >
         <motion.div
-          animate={{ 
+          animate={{
             y: [0, -20, 0],
           }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -163,7 +200,7 @@ const ContactSection = () => {
                 <span className="pixel-text-neon">SCALE?</span>
               </h2>
               <p className="font-inter text-base sm:text-lg text-muted-foreground mb-8 sm:mb-10">
-                Partner with Elite Ad to transform your marketing into a 
+                Partner with Elite Ad to transform your marketing into a
                 predictable, scalable revenue engine. Let's discuss your goals.
               </p>
 
@@ -328,11 +365,25 @@ const ContactSection = () => {
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="w-full btn-gold flex items-center justify-center gap-2 font-orbitron"
+                      disabled={isLoading}
+                      className="w-full btn-gold flex items-center justify-center gap-2 font-orbitron disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Send className="w-5 h-5" />
-                      Submit Inquiry
+                      {isLoading ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-5 h-5" />
+                          Submit Inquiry
+                        </>
+                      )}
                     </button>
+
+                    {error && (
+                      <p className="text-center text-sm text-red-400">{error}</p>
+                    )}
 
                     <p className="text-center text-xs text-muted-foreground">
                       We typically respond within 24 hours.
@@ -352,7 +403,7 @@ const ContactSection = () => {
                       Thank You!
                     </h3>
                     <p className="font-inter text-muted-foreground mb-6">
-                      Your inquiry has been received. Our team will be in touch within 24 hours 
+                      Your inquiry has been received. Our team will be in touch within 24 hours
                       to discuss how we can help scale your growth.
                     </p>
                     <button

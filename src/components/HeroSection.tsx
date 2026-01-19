@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Play, ChevronDown } from "lucide-react";
 import LogoShowcase from "./LogoShowcase";
+import LottieAnimation from "./LottieAnimation";
 
 const stats = [
   { label: "ROAS Average", value: 8.4, suffix: "x", prefix: "" },
@@ -50,7 +51,7 @@ const HeroSection = () => {
     target: sectionRef,
     offset: ["start start", "end start"]
   });
-  
+
   const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
@@ -58,12 +59,12 @@ const HeroSection = () => {
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24">
       {/* Clean warm background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-muted/30" />
-      
+
       {/* Subtle decorative elements */}
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-secondary/5 rounded-full blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary/3 to-transparent opacity-50" />
-      
+
       {/* Subtle grid pattern */}
       <div className="absolute inset-0 grid-pattern opacity-40" />
 
@@ -83,9 +84,9 @@ const HeroSection = () => {
           </motion.div>
 
           {/* Logo */}
-          <LogoShowcase 
-            size="xl" 
-            showGlowRings={false} 
+          <LogoShowcase
+            size="xl"
+            showGlowRings={false}
             showParticles={false}
             priority={true}
             className="mb-8 sm:mb-10 h-28 sm:h-36 md:h-44"
@@ -98,9 +99,14 @@ const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6"
           >
-            <span className="text-foreground">Scale Your Growth</span>
-            <br />
-            <span className="text-primary">With Precision</span>
+            <div className="flex flex-col items-center gap-2">
+              <LottieAnimation
+                url="https://lottie.host/933cece9-8973-4f96-857c-658f80455de8/mCszl9kLUP.json"
+                className="w-20 h-20 sm:w-28 sm:h-28 -mb-4 sm:-mb-6"
+              />
+              <span className="text-foreground">Scale Your Growth</span>
+              <span className="text-primary">With Precision</span>
+            </div>
           </motion.h1>
 
           {/* Tagline */}
@@ -110,7 +116,7 @@ const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-10 leading-relaxed"
           >
-            We're a performance marketing agency that delivers measurable ROI 
+            We're a performance marketing agency that delivers measurable ROI
             through data-driven strategies and cutting-edge technology.
           </motion.p>
 
@@ -121,15 +127,15 @@ const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
-            <a 
-              href="#contact" 
+            <a
+              href="#contact"
               className="group inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold px-8 py-4 rounded-full text-base hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               Start Your Campaign
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
-            <a 
-              href="#results" 
+            <a
+              href="#results"
               className="group inline-flex items-center gap-2 bg-transparent border-2 border-foreground/20 text-foreground font-semibold px-8 py-4 rounded-full text-base hover:border-primary hover:text-primary transition-all duration-300"
             >
               <Play className="w-5 h-5" />
@@ -153,10 +159,10 @@ const HeroSection = () => {
                 className="text-center p-4 sm:p-6 rounded-2xl bg-card/50 border border-border/50 hover:border-primary/30 hover:bg-card transition-all duration-300"
               >
                 <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-1">
-                  <AnimatedCounter 
-                    value={stat.value} 
-                    suffix={stat.suffix} 
-                    prefix={stat.prefix} 
+                  <AnimatedCounter
+                    value={stat.value}
+                    suffix={stat.suffix}
+                    prefix={stat.prefix}
                     delay={600 + index * 100}
                   />
                 </div>
@@ -170,7 +176,7 @@ const HeroSection = () => {
       </motion.div>
 
       {/* Scroll indicator */}
-      <motion.div 
+      <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

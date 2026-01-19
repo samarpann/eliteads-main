@@ -1,7 +1,14 @@
 import { useIsMobile } from "@/hooks/use-mobile";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const AnimatedBackground = () => {
   const isMobile = useIsMobile();
+  const { scrollYProgress } = useScroll();
+
+  // Parallax offsets for different layers
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   // On mobile, use simpler CSS animations instead of framer-motion
   if (isMobile) {
@@ -31,35 +38,26 @@ const AnimatedBackground = () => {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Desktop: CSS animations for performance */}
-      <div
-        className="absolute w-[600px] h-[600px] rounded-full animate-morph-1"
+      {/* Desktop: Parallax + CSS animations */}
+      <motion.div
+        className="absolute w-[600px] h-[600px] rounded-full animate-morph-1 opacity-60"
         style={{
-          background: "radial-gradient(circle, hsl(120 100% 50% / 0.15) 0%, transparent 70%)",
-          filter: "blur(60px)",
-          top: "-20%",
-          left: "-10%",
-          willChange: "transform",
+          ...style1,
+          y: y1
         }}
       />
-      <div
-        className="absolute w-[500px] h-[500px] rounded-full animate-morph-2"
+      <motion.div
+        className="absolute w-[500px] h-[500px] rounded-full animate-morph-2 opacity-50"
         style={{
-          background: "radial-gradient(circle, hsl(42 90% 55% / 0.12) 0%, transparent 70%)",
-          filter: "blur(50px)",
-          top: "20%",
-          right: "-10%",
-          willChange: "transform",
+          ...style2,
+          y: y2
         }}
       />
-      <div
-        className="absolute w-[400px] h-[400px] rounded-full animate-morph-3"
+      <motion.div
+        className="absolute w-[400px] h-[400px] rounded-full animate-morph-3 opacity-40"
         style={{
-          background: "radial-gradient(circle, hsl(150 70% 50% / 0.1) 0%, transparent 70%)",
-          filter: "blur(40px)",
-          bottom: "-10%",
-          left: "25%",
-          willChange: "transform",
+          ...style3,
+          y: y3
         }}
       />
 
@@ -78,6 +76,30 @@ const AnimatedBackground = () => {
       </div>
     </div>
   );
+};
+
+const style1 = {
+  background: "radial-gradient(circle, hsl(120 100% 50% / 0.15) 0%, transparent 70%)",
+  filter: "blur(60px)",
+  top: "-20%",
+  left: "-10%",
+  willChange: "transform",
+};
+
+const style2 = {
+  background: "radial-gradient(circle, hsl(42 90% 55% / 0.12) 0%, transparent 70%)",
+  filter: "blur(50px)",
+  top: "20%",
+  right: "-10%",
+  willChange: "transform",
+};
+
+const style3 = {
+  background: "radial-gradient(circle, hsl(150 70% 50% / 0.1) 0%, transparent 70%)",
+  filter: "blur(40px)",
+  bottom: "-10%",
+  left: "25%",
+  willChange: "transform",
 };
 
 export default AnimatedBackground;
